@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archive Button</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Archive Button</h1>
+      <p>Press a physical button to archive old S3 files. A buzzer confirms the result.</p>
+    </div>
+    <button id="runBtn" class="primary">🔘 Press Archive Button</button>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <h2>Archive Monitoring Dashboard</h2>
+        <p>Track archive runs, buzzer confirmation and device health.</p>
+      </div>
+      <div class="status-pill" id="devicePill"><span></span> <i id="deviceText">Device Online</i></div>
+    </section>
+
+    <section class="cards">
+      <div class="card">
+        <div class="label">Files Archived</div>
+        <div class="value" id="files">0</div>
+        <div class="small">Moved to archive storage</div>
+      </div>
+      <div class="card">
+        <div class="label">Data Moved</div>
+        <div class="value" id="gb">0 GB</div>
+        <div class="small">Nothing is deleted</div>
+      </div>
+      <div class="card">
+        <div class="label">Failed Runs</div>
+        <div class="value danger" id="failed">0</div>
+        <div class="small">Needs attention</div>
+      </div>
+      <div class="card highlight">
+        <div class="label">Success Indicator</div>
+        <div class="value" id="rate">0%</div>
+        <div class="small" id="rateText">No runs yet</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="panel-title">
+          <h3>Current Archive Run</h3>
+          <span id="runStatus" class="badge idle">IDLE</span>
+        </div>
+        <div class="pipeline">
+          <div class="stage" id="press">
+            <div class="stage-icon">🔘</div>
+            <strong>Press</strong>
+            <span>Hold button 2 seconds</span>
+          </div>
+          <div class="arrow">→</div>
+          <div class="stage" id="archive">
+            <div class="stage-icon">📦</div>
+            <strong>Archive</strong>
+            <span>S3 files move to Glacier</span>
+          </div>
+          <div class="arrow">→</div>
+          <div class="stage" id="buzzer">
+            <div class="stage-icon">🔔</div>
+            <strong>Buzzer</strong>
+            <span>Confirms the result</span>
+          </div>
+        </div>
+        <div id="message" class="message">Click “Press Archive Button” to start a demo run.</div>
+
+        <div class="controls">
+          <label>Next outcome
+            <select id="forceOutcome">
+              <option value="random">Random</option>
+              <option value="success">Success (1 beep)</option>
+              <option value="partial">Partial (2 beeps)</option>
+              <option value="failed">Failed (long tone)</option>
+            </select>
+          </label>
+          <label class="check"><input type="checkbox" id="muted"> Mute buzzer</label>
+          <label class="check"><input type="checkbox" id="offline"> Simulate device offline</label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <h3>Success Indicator</h3>
+          <span class="legend">Based on completed runs</span>
+        </div>
+        <div class="gauge-wrap">
+          <div class="gauge" id="gauge">
+            <div class="gauge-inner">
+              <strong id="gaugeRate">0%</strong>
+              <span>Success Rate</span>
+            </div>
+          </div>
+        </div>
+        <div class="formula">
+          Success Rate = Successful Runs ÷ Total Runs × 100
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h3>Archive Run History</h3>
+        <button id="resetBtn" class="secondary">Reset Demo Data</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Run</th>
+              <th>Files</th>
+              <th>Size</th>
+              <th>Buzzer</th>
+              <th>Result</th>
+              <th>Severity</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="history"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-title">
+        <h3>Severity &amp; Escalation</h3>
+        <span class="legend">Proposed targets</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Severity</th><th>Issue</th><th>Response</th><th>Escalate to</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge failed">P1 Critical</span></td><td>Archive moved the wrong files or errored mid-run</td><td>Within 15 minutes</td><td>On-call engineer, then data owner</td></tr>
+            <tr><td><span class="badge failed">P2 Major</span></td><td>Repeated failures or permission errors</td><td>Within 1 hour</td><td>Support team, then on-call engineer</td></tr>
+            <tr><td><span class="badge partial">P3 Minor</span></td><td>Single failure that succeeded on retry</td><td>Next business day</td><td>Support team queue</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="how">
+      <h3>How the System Works</h3>
+      <div class="steps">
+        <div><b>1</b><span>Press Button</span></div>
+        <div><b>2</b><span>AWS IoT Core</span></div>
+        <div><b>3</b><span>Lambda Archive Job</span></div>
+        <div><b>4</b><span>S3 → Glacier</span></div>
+        <div><b>5</b><span>Buzzer + Logged Result</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Archive Button • Pilot Prototype • 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
